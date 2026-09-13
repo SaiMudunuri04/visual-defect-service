@@ -3,7 +3,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY pyproject.toml ./
 COPY src ./src
-RUN python -m pip install --no-cache-dir . && useradd --system --uid 10001 app
+# Serve on CPU; training can use a separate GPU environment.
+RUN python -m pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch==2.13.0 torchvision==0.28.0 \
+    && python -m pip install --no-cache-dir . \
+    && useradd --system --uid 10001 app
 USER 10001
 EXPOSE 8000
 CMD ["uvicorn", "service.app:app", "--host", "0.0.0.0", "--port", "8000"]
