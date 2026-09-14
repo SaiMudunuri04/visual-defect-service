@@ -9,6 +9,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 
 app = FastAPI(title="Visual defect classifier", version="0.1.0")
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
+MAX_IMAGE_PIXELS = 20_000_000
 
 
 @lru_cache(maxsize=1)
@@ -46,7 +47,6 @@ def ready():
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    import torch
     from PIL import Image, UnidentifiedImageError
 
     if file.content_type not in ("image/png", "image/jpeg", "image/webp"):
@@ -55,14 +55,19 @@ async def predict(file: UploadFile = File(...)):
     if len(data) > MAX_IMAGE_BYTES:
         raise HTTPException(413, "Image too large")
     try:
+        with Image.open(io.BytesIO(data)) as opened:
+            if opened.width * opened.height > MAX_IMAGE_PIXELS:
+                raise HTTPException(413, "Image dimensions too large")
+            image = opened.convert("RGB")
+    except (UnidentifiedImageError, OSError, Image.DecompressionBombError):
+        raise HTTPException(422, "Invalid image")
+    import torch
+    try:
         model, classes, transform = model_bundle()
-        image = Image.open(io.BytesIO(data)).convert("RGB")
         with torch.inference_mode():
             probabilities = torch.softmax(model(transform(image).unsqueeze(0)), dim=1)[0]
     except (FileNotFoundError, ValueError, RuntimeError):
         raise HTTPException(503, "Model artifact unavailable")
-    except UnidentifiedImageError:
-        raise HTTPException(422, "Invalid image")
     index = int(probabilities.argmax())
     return {"class": classes[index], "confidence": float(probabilities[index]),
             "scores": {name: float(probabilities[i]) for i, name in enumerate(classes)}}

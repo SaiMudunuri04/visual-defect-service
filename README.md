@@ -37,4 +37,4 @@ python -m service.deep_learning /path/to/dataset --output artifacts/vision-model
 MODEL_PATH=artifacts/vision-model.pt uvicorn service.app:app --host 127.0.0.1
 ```
 
-Mount the reviewed checkpoint at `/models/vision-model.pt` and set `MODEL_PATH`. The API limits uploads to 8 MiB and accepts PNG, JPEG, or WebP. A domain-specific evaluation set and GPU/CPU sizing are required before a real deployment. No image data or quality claim is bundled.
+Mount the reviewed checkpoint at `/models/vision-model.pt` and set `MODEL_PATH`. The API limits uploads to 8 MiB and decoded images to 20 million pixels; it accepts PNG, JPEG, or WebP and rejects malformed images before loading the model. A domain-specific evaluation set and GPU/CPU sizing are required before a real deployment. No image data or quality claim is bundled.
