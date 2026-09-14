@@ -6,7 +6,7 @@ podLabels: {}
 podAnnotations: {}
 image:
   repository: ghcr.io/saimudunuri04/visual-defect-service
-  tag: "05c71b7c3f017d7060b3edddcb6f8191cb2dda3d"
+  tag: "5742b654bff3c1119871c2f294992633814bc34b"
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 serviceAccount:
