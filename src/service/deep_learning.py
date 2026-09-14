@@ -7,7 +7,6 @@ import hashlib
 import json
 from pathlib import Path
 
-
 SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 
 
@@ -51,10 +50,8 @@ def train(root: Path, output: Path, epochs: int = 15, batch_size: int = 32,
     transform_train = transforms.Compose([transforms.Resize((256, 256)),
                                           transforms.RandomResizedCrop(224), transforms.RandomHorizontalFlip(),
                                           transforms.ToTensor(),
-                                          transforms.Normalize(weights.meta["mean"] if "mean" in weights.meta else
-                                                               (0.485, 0.456, 0.406),
-                                                               weights.meta["std"] if "std" in weights.meta else
-                                                               (0.229, 0.224, 0.225))])
+                                          transforms.Normalize(weights.meta.get("mean", (0.485, 0.456, 0.406)),
+                                                               weights.meta.get("std", (0.229, 0.224, 0.225)))])
     transform_val = weights.transforms()
     training = datasets.ImageFolder(root / "train", transform=transform_train)
     validation = datasets.ImageFolder(root / "val", transform=transform_val)

@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/SaiMudunuri04/visual-defect-service.git
     targetRevision: main
-    path: helm/chart
+    path: k8s/helm/visual-defect-service
   destination:
     server: https://kubernetes.default.svc
     namespace: visual-defect-service

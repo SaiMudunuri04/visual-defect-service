@@ -4,10 +4,14 @@ import io
 import os
 from functools import lru_cache
 from pathlib import Path
+from typing import Annotated
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 
+from .observability import RequestLoggingMiddleware
+
 app = FastAPI(title="Visual defect classifier", version="0.1.0")
+app.add_middleware(RequestLoggingMiddleware)
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
 MAX_IMAGE_PIXELS = 20_000_000
 
@@ -46,7 +50,7 @@ def ready():
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(file: Annotated[UploadFile, File()]):
     from PIL import Image, UnidentifiedImageError
 
     if file.content_type not in ("image/png", "image/jpeg", "image/webp"):
