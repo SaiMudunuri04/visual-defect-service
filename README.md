@@ -7,6 +7,10 @@ a container, Helm release, Argo CD application, and a CI workflow that builds an
 immutable GHCR image after tests pass. It is a reference implementation; it has not
 been deployed to a user's AWS account or Kubernetes cluster.
 
+## Start here
+
+**Problem:** classify visual defects with a reproducible image-inference path. **What this demonstrates:** ResNet18 transfer learning, split checks, early stopping, checkpointing, validation history, and bounded image inference. **Inspect first:** [`docs/architecture.md`](docs/architecture.md), [`src/service/app.py`](src/service/app.py), and the inference tests.
+
 ## Run
 
 ```sh
