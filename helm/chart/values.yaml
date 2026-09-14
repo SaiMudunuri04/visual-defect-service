@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
   repository: ghcr.io/saimudunuri04/visual-defect-service
-  tag: "cc358511ccf2d2e2775ff25824683767db3eacdd"
+  tag: "05c71b7c3f017d7060b3edddcb6f8191cb2dda3d"
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 service:
