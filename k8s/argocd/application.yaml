@@ -1,3 +1,25 @@
+# =============================================================================
+# Argo CD Application: visual-defect-service
+# -----------------------------------------------------------------------------
+# Placeholders to review before installing this Application in a real cluster:
+#   spec.project               - Argo CD project ("default" here; use a scoped
+#                                project per environment in production).
+#   spec.source.repoURL        - Git repository that contains this Helm chart.
+#   spec.source.targetRevision - Git revision Argo CD tracks ("main" here).
+#   spec.source.path           - chart path inside that repository.
+#   spec.destination.server    - target cluster API server. The value below
+#                                ("https://kubernetes.default.svc") means the
+#                                same cluster Argo CD runs in.
+#   spec.destination.namespace - namespace the release syncs into; created
+#                                automatically via syncOptions CreateNamespace.
+# GitOps flow: push to main -> CI tests, builds an immutable GHCR image tagged
+# with the tested commit SHA and pins it in the chart's values.yaml -> Argo CD
+# detects the chart change and auto-syncs (prune + selfHeal), so the cluster
+# converges on exactly the tested commit.
+# These manifests were validated with `helm lint --strict`, `helm template`,
+# and `kubectl apply --dry-run=client`; they have not been applied to a live
+# cluster.
+# =============================================================================
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

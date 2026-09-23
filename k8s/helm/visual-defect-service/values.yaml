@@ -78,3 +78,18 @@ env: {}
 envFromSecretName: ""
 volumeMounts: []
 volumes: []
+
+## Non-sensitive app configuration rendered into the <release>-config ConfigMap
+## and injected as container environment. The FastAPI app reads each key with
+## os.getenv. Keep secrets here OUT — reference them via envFromSecretName.
+appEnv:
+  MODEL_PATH: "/models/vision-model.pt"
+
+## Uncomment and tune only if you ship a GPU image variant (e.g. NVIDIA device
+## plugin present on the nodes). The published CPU image does not need these.
+## nodeSelector:
+##   nvidia.com/gpu.present: "true"
+## tolerations:
+##   - key: nvidia.com/gpu
+##     operator: Exists
+##     effect: NoSchedule
