@@ -1,0 +1,17 @@
+{{- $fullname := include "service.fullname" . -}}
+{{ $fullname }} ({{ .Chart.Name }} chart {{ .Chart.Version }}) is installed in namespace {{ .Release.Namespace }}.
+
+1. Watch the rollout:
+   kubectl rollout status deployment/{{ $fullname }} -n {{ .Release.Namespace }}
+
+2. Port-forward the API:
+   kubectl port-forward svc/{{ $fullname }} 8000:8000 -n {{ .Release.Namespace }}
+
+3. Probe the health endpoints:
+   curl http://127.0.0.1:8000/health/live
+   curl http://127.0.0.1:8000/health/ready
+
+Non-sensitive app configuration ({{ $fullname }}-config ConfigMap, set via values.appEnv):
+{{- range $key, $value := .Values.appEnv }}
+  {{ $key }}={{ $value }}
+{{- end }}
